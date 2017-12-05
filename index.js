@@ -10,7 +10,7 @@ module.exports = function AutoPot(dispatch) {
 	
 	dispatch.hook('S_LOGIN', 2, event => {
 		cid = event.cid
-		player = event.name;
+		player = event.name
 	})	
 	
 	dispatch.hook('S_USER_STATUS', 1, event => { 
@@ -25,14 +25,11 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_CREATURE_CHANGE_HP', 3, event => {
 		if (!enabled) return
 		
-		if(!hpCd && event.target.equals(cid) && (event.curHp <= event.maxHp/2)) { // Change value here
-			ItemID = 6552;
-			useItem();
-			hpCd = true;
-			setTimeout(function(){
-				hpCd = false;
-				ItemID = null;
-			}, 10000)
+		if(!hpCd && event.target.equals(cid) && (event.curHp <= event.maxHp/4)) { // Change value here
+			ItemID = 6552
+			useItem()
+			hpCd = true
+			setTimeout(function(){ hpCd = false }, 10000)
 		}
 	})
 
@@ -40,13 +37,10 @@ module.exports = function AutoPot(dispatch) {
 		if (!enabled) return
 		
 		if(!mpCd && event.target.equals(cid) && (event.currentMp <= event.maxMp/2)) { // Change value here
-			ItemID = 6562;
-			useItem();
-			mpCd = true;
-			setTimeout(function(){
-				mpCd = false;
-				ItemID = null;
-			}, 10000)
+			ItemID = 6562
+			useItem()
+			mpCd = true
+			setTimeout(function(){ mpCd = false }, 10000)
 		}
 	})
 	
