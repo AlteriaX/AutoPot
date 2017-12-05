@@ -25,7 +25,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_CREATURE_CHANGE_HP', 3, event => {
 		if (!enabled) return
 		
-		if(!hpCd && event.target.equals(cid) && (event.curHp <= event.maxHp/4)) { // Change value here
+		if(!hpCd && event.target.equals(cid) && (event.curHp <= event.maxHp/2)) { // Change value here
 			ItemID = 6552
 			useItem()
 			hpCd = true
