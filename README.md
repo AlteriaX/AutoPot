@@ -1,5 +1,5 @@
 # AutoPot
 
-Automatically uses Prime Recovery/Replenishment Potable IN COMBAT under 50% HP/MP.
+Automatically uses Prime Recovery Potable (under 25% HP) and Prime Replenishment Potable (under 50% MP) IN COMBAT only.
 
-Type !autopot in chat to toggle. (Enabled by default)
+Requires command, type autopot in chat to toggle. (Enabled by default)
