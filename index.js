@@ -10,7 +10,7 @@ module.exports = function AutoPot(dispatch) {
 		hpCd = false,
 		enabled = true
 	
-	dispatch.hook('S_LOGIN', 9, event => {
+	dispatch.hook('S_LOGIN', 10, event => {
 		gameId = event.gameId
 	})	
 	
@@ -47,9 +47,9 @@ module.exports = function AutoPot(dispatch) {
 	
 	function useItem() {
 		if(inCombat){
-			dispatch.toServer('C_USE_ITEM', 1, {
-				ownerId: gameId,
-			    item: ItemID,
+			dispatch.toServer('C_USE_ITEM', 3, {
+				gameId: gameId,
+			    id: ItemID,
 			})	
 		}
 	}
