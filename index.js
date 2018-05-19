@@ -13,13 +13,13 @@ module.exports = function AutoPot(dispatch) {
 		enabled = true
 		
     try {
-		config = require('./config.json');
+		settings = require('./settings.json');
 	} catch(e) {
-		config = {
+		settings = {
 			"HPpercentage": "25",
             "MPpercentage": "50"
 		};
-		saveConfig();
+		saveSettings();
 	}
 	
 	dispatch.hook('S_LOGIN', 10, event => {
@@ -38,7 +38,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_CREATURE_CHANGE_HP', 6, event => {
 		if (!enabled) return;
 		
-		if(!hpCd && event.target.equals(gameId) && (event.curHp <= event.maxHp*(config.HPpercentage/100))) {
+		if(!hpCd && event.target.equals(gameId) && (event.curHp <= event.maxHp*(settings.HPpercentage/100))) {
 			ItemID = 6552;
 			useItem();
 			hpCd = true;
@@ -49,7 +49,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_PLAYER_CHANGE_MP', 1, event => {
 		if (!enabled) return;
 		
-		if(!mpCd && event.target.equals(gameId) && (event.currentMp <= event.maxMp*(config.MPpercentage/100))) {
+		if(!mpCd && event.target.equals(gameId) && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
 			ItemID = 6562;
 			useItem();
 			mpCd = true;
@@ -66,8 +66,8 @@ module.exports = function AutoPot(dispatch) {
 		}
 	}
 	
-	function saveConfig() {
-        fs.writeFile(path.join(__dirname, 'config.json'), JSON.stringify(config, null, 4), err => {
+	function saveSettings() {
+        fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settings, null, 4), err => {
         });
     }
 	
@@ -79,15 +79,15 @@ module.exports = function AutoPot(dispatch) {
 	command.add('set', (type, value) => {
 		switch (type) {
 			case "hp":
-                config.HPpercentage = value;
+                settings.HPpercentage = value;
 				command.message('HP Pot will be used under ' + value + '% HP.');
                 break;
             case "mp":
-                config.MPpercentage = value;
+                settings.MPpercentage = value;
 				command.message('MP Pot will be used under ' + value + '% MP.');
                 break;
 		}
-		saveConfig();
+		saveSettings();
 	})
 	
 }
