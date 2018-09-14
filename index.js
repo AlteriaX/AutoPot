@@ -26,8 +26,8 @@ module.exports = function AutoPot(dispatch) {
 		gameId = event.gameId
 	})	
 	
-	dispatch.hook('S_USER_STATUS', 1, event => { 
-		if(event.target.equals(gameId)) {
+	dispatch.hook('S_USER_STATUS', 3, event => { 
+		if(event.gameId.equals(gameId)) {
 			if(event.status == 1) {
 				inCombat = true
 			}
@@ -49,7 +49,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_PLAYER_CHANGE_MP', 1, event => {
 		if (!enabled) return;
 		
-		if(!mpCd && event.target.equals(gameId) && (event.currentMp <= event.maxMp.toString()*(settings.MPpercentage/100))) {
+		if(!mpCd && event.target.equals(gameId) && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
 			ItemID = 6562;
 			useItem();
 			mpCd = true;
