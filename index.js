@@ -27,7 +27,7 @@ module.exports = function AutoPot(dispatch) {
 	})	
 	
 	dispatch.hook('S_USER_STATUS', 3, event => { 
-		if(event.gameId.equals(gameId)) {
+		if(event.gameId == gameId) {
 			if(event.status == 1) {
 				inCombat = true
 			}
@@ -38,7 +38,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_CREATURE_CHANGE_HP', 6, event => {
 		if (!enabled) return;
 		
-		if(!hpCd && event.target.equals(gameId) && (event.curHp <= event.maxHp.toString()*(settings.HPpercentage/100))) {
+		if(!hpCd && event.target == gameId && (event.curHp <= event.maxHp.toString()*(settings.HPpercentage/100))) {
 			ItemID = 6552;
 			useItem();
 			hpCd = true;
@@ -49,7 +49,7 @@ module.exports = function AutoPot(dispatch) {
 	dispatch.hook('S_PLAYER_CHANGE_MP', 1, event => {
 		if (!enabled) return;
 		
-		if(!mpCd && event.target.equals(gameId) && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
+		if(!mpCd && event.target == gameId && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
 			ItemID = 6562;
 			useItem();
 			mpCd = true;
