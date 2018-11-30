@@ -24,7 +24,7 @@ module.exports = function AutoPot(mod) {
 		gameId = event.gameId
 	})	
 	
-	mod.hook('S_USER_STATUS', 2, event => { 
+	mod.hook('S_USER_STATUS', 3, event => { 
 		if(event.gameId == gameId) {
 			if(event.status == 1) {
 				inCombat = true
