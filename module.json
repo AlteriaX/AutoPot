@@ -1,0 +1,11 @@
+{
+    "disableAutoUpdate": false,
+    "name": "AutoPot",
+    "author": "Alteria",
+    "description": "Automatically uses Prime Recovery Potable and Prime Replenishment Potable IN COMBAT (except for Mystic)",
+    "options": {
+        "niceName": "AutoPot"
+    },
+    "servers": ["https://raw.githubusercontent.com/AlteriaX/AutoPot/master/"],
+	"supportUrl": "https://github.com/AlteriaX/AutoPot/issues"
+}
