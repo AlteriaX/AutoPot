@@ -1,14 +1,17 @@
 module.exports = function AutoPot(mod) {
 	const path = require('path'),
-	    fs = require('fs')
+	    fs = require('fs'),
+		command = mod.command || mod.require.command
 	
-	let gameId = null,
+	let gameId,
+	    job,
 		inCombat,
 		settings,
 		ItemID = null,
 		mpCd = false,
 		hpCd = false,
-		enabled = true
+		enabled = true,
+		logininfo = true
 		
 	try {
 		settings = require('./settings.json')
@@ -20,13 +23,17 @@ module.exports = function AutoPot(mod) {
 		saveSettings()
 	}
 	
-	mod.hook('S_LOGIN', 10, event => {
+	mod.hook('S_LOGIN', 12, event => {
 		gameId = event.gameId
-	})	
+		job = (event.templateId - 10101) % 100
+		logininfo = true
+	})
+	
+	mod.hook('S_SPAWN_ME', 3, event => { loginMsg() })
 	
 	mod.hook('S_USER_STATUS', 3, event => { 
-		if(event.gameId == gameId) {
-			if(event.status == 1) {
+		if(event.gameId === gameId) {
+			if(event.status === 1) {
 				inCombat = true
 			}
 			else inCombat = false
@@ -36,7 +43,7 @@ module.exports = function AutoPot(mod) {
 	mod.hook('S_CREATURE_CHANGE_HP', 6, event => {
 		if (!enabled) return
 		
-		if(!hpCd && event.target == gameId && (event.curHp.toString() <= event.maxHp.toString()*(settings.HPpercentage/100))) {
+		if(!hpCd && event.target === gameId && (event.curHp.toString() <= event.maxHp.toString()*(settings.HPpercentage/100))) {
 			ItemID = 6552
 			useItem()
 			hpCd = true
@@ -47,7 +54,7 @@ module.exports = function AutoPot(mod) {
 	mod.hook('S_PLAYER_CHANGE_MP', 1, event => {
 		if (!enabled) return
 		
-		if(!mpCd && event.target == gameId && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
+		if(!mpCd && event.target === gameId && (event.currentMp <= event.maxMp*(settings.MPpercentage/100))) {
 			ItemID = 6562
 			useItem()
 			mpCd = true
@@ -56,7 +63,7 @@ module.exports = function AutoPot(mod) {
 	})
 	
 	function useItem() {
-		if(inCombat){
+		if(inCombat || job === 7){
 			mod.toServer('C_USE_ITEM', 3, {
 				gameId: gameId,
 			    id: ItemID,
@@ -64,25 +71,40 @@ module.exports = function AutoPot(mod) {
 		}
 	}
 	
+	function loginMsg() {
+		if(!logininfo) return
+		command.message(`AutoPot Info:
+HP Pot will be used under <font color="#ff3333">${settings.HPpercentage}% HP</font>
+MP Pot will be used under <font color="#0099ff">${settings.MPpercentage}% MP</font>
+Usage: <font color="#ffffff">ap</font> - Toggle on/off
+              <font color="#ffffff">ap [hp | mp] [value]</font> - Set % HP/MP
+              <font color="#ffffff">ap info</font> - Show current settings`)
+		logininfo = false
+	}
+		
+	
 	function saveSettings() {
         fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settings, null, 4), err => {
         })
     }
 	
-	mod.command.add('autopot', (arg) => {
-        enabled = !enabled
-        mod.command.message('(AutoPot) ' + (enabled ? 'enabled' : 'disabled'))
-    })
-	
-	mod.command.add('set', (type, value) => {
+	command.add('ap', (type, value) => {
 		switch (type) {
+			case undefined:
+				enabled = !enabled
+				command.message('[AutoPot] ' + (enabled ? 'enabled' : 'disabled'))
+				break
+			case "info":
+				logininfo = true
+				loginMsg()
+				break
 			case "hp":
                 settings.HPpercentage = value
-				mod.command.message('HP Pot will be used under ' + value + '% HP.')
+				command.message('[AutoPot] HP Pot will be used under ' + value + '% HP.')
                 break
             case "mp":
                 settings.MPpercentage = value
-				mod.command.message('MP Pot will be used under ' + value + '% MP.')
+				command.message('[AutoPot] MP Pot will be used under ' + value + '% MP.')
                 break
 		}
 		saveSettings()
