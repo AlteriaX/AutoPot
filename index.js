@@ -23,7 +23,7 @@ module.exports = function AutoPot(mod) {
 		saveSettings()
 	}
 	
-	mod.hook('S_LOGIN', 12, event => {
+	mod.hook('S_LOGIN', mod.majorPatchVersion >= 81 ? 13 : 12, event => {
 		gameId = event.gameId
 		job = (event.templateId - 10101) % 100
 		logininfo = true
