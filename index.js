@@ -1,10 +1,10 @@
 module.exports = function AutoPot(mod) {
 	const path = require('path'),
-	    fs = require('fs'),
+		fs = require('fs'),
 		command = mod.command || mod.require.command
 	
 	let gameId,
-	    job,
+		job,
 		inCombat,
 		settings,
 		ItemID = null,
@@ -18,12 +18,12 @@ module.exports = function AutoPot(mod) {
 	} catch(e) {
 		settings = {
 			"HPpercentage": "25",
-            "MPpercentage": "50"
+			"MPpercentage": "50"
 		}
 		saveSettings()
 	}
 	
-	mod.hook('S_LOGIN', mod.majorPatchVersion >= 81 ? 13 : 12, event => {
+	mod.hook('S_LOGIN', mod.majorPatchVersion >= 86 ? 14 : 13, event => {
 		gameId = event.gameId
 		job = (event.templateId - 10101) % 100
 		logininfo = true
@@ -84,9 +84,9 @@ Usage: <font color="#ffffff">ap</font> - Toggle on/off
 		
 	
 	function saveSettings() {
-        fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settings, null, 4), err => {
-        })
-    }
+		fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settings, null, 4), err => {
+		})
+	}
 	
 	command.add('ap', (type, value) => {
 		switch (type) {
@@ -99,13 +99,13 @@ Usage: <font color="#ffffff">ap</font> - Toggle on/off
 				loginMsg()
 				break
 			case "hp":
-                settings.HPpercentage = value
+				settings.HPpercentage = value
 				command.message('[AutoPot] HP Pot will be used under ' + value + '% HP.')
-                break
-            case "mp":
-                settings.MPpercentage = value
+				break
+			case "mp":
+				settings.MPpercentage = value
 				command.message('[AutoPot] MP Pot will be used under ' + value + '% MP.')
-                break
+				break
 		}
 		saveSettings()
 	})
