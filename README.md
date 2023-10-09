@@ -1,7 +1,5 @@
 # AutoPot
 
-Requires command.
-
 Automatically uses Prime Recovery Potable (under 25% HP) and Prime Replenishment Potable (under 50% MP) IN COMBAT (except for Mystic)
 
 List of commands:
